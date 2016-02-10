@@ -28,29 +28,22 @@ baseurl=http://cbs.centos.org/repos/virt7-docker-common-release/x86_64/os/
 gpgcheck=0
 EOF
 
-yum -y install --enablerepo=virt7-docker-common-release etcd kubernetes flannel
+yum -y install --enablerepo=virt7-docker-common-release kubernetes flannel
 
-cp -f /etc/kubernetes/config /etc/kubernetes/config.original
-cp -f /etc/etcd/etcd.conf /etc/etcd/etcd.conf.orginal
-cp -f /etc/sysconfig/flanneld /etc/sysconfig/flanneld.orginal
-cp -f /etc/kubernetes/apiserver /etc/kubernetes/apiserver.orginal
+/usr/bin/cp -f /etc/kubernetes/config /etc/kubernetes/config.original
+/usr/bin/cp -f /etc/sysconfig/flanneld /etc/sysconfig/flanneld.orginal
+/usr/bin/cp -f /etc/kubernetes/kubelet /etc/kubernetes/kubelet.original
 
-/usr/bin/cp -f /git/kubernetes-centos/master/conf/etcd.conf /etc/etcd/etcd.conf
+
 /usr/bin/cp -f /git/kubernetes-centos/master/conf/flanneld /etc/sysconfig/flanneld
-/usr/bin/cp -f /git/kubernetes-centos/master/conf/apiserver /etc/kubernetes/apiserver
 /usr/bin/cp -f /git/kubernetes-centos/master/conf/config /etc/kubernetes/config
+/usr/bin/cp -f /git/kubernetes-centos/minion/conf/kubelet /etc/kubernetes/kubelet
 
-for SERVICES in etcd kube-apiserver kube-controller-manager kube-scheduler; do
+
+for SERVICES in flanneld kube-proxy kubelet docker; do
     systemctl restart $SERVICES
     systemctl enable $SERVICES
     systemctl status $SERVICES 
 done
 
-etcdctl mk /coreos.com/network/config '{"Network":"172.17.0.0/16"}'
-
-for SERVICES in flanneld; do
-    systemctl restart $SERVICES
-    systemctl enable $SERVICES
-    systemctl status $SERVICES 
-done
 
