@@ -1,3 +1,8 @@
+#!/bin/bash
+#
+# hostfile must contain IP adress of master-centos & minion-centos
+echo $(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)  centos-minion >> /etc/hosts
+
 # hostfile must contain IP adress of master-centos & minion-centos
 
 yum -y update
