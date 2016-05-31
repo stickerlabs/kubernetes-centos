@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: logspout
+spec:
+  template:
+    metadata:
+      labels:
+        app: logspout
+    spec:
+      containers:
+        - name: logspout
+          args: [ "syslog://logstash.kubernetes.default.svc.cluster.local:5000" ]
+          image: gliderlabs/logspout
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: SYSLOG_TAG
+            value: '{{if index .Container.Config.Labels "io.kubernetes.pod.namespace"}}{{ index .Container.Config.Labels "io.kubernetes.pod.namespace" }}/{{ index .Container.Config.Labels "io.kubernetes.pod.name" }}{{else}}{{.Hostname}}{{end}}'
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-sock
+            readOnly: true
+      volumes:
+      - name: docker-sock
+        hostPath:
+         path: /var/run/docker.sock
