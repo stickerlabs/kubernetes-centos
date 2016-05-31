@@ -1,0 +1,15 @@
+#! /bin/bash
+
+if [ 'cat /etc/hosts|grep centos-master|cut -d " " -f 2' != "centos-master" ]; then
+  echo Please provide the IP address of the kubernetes master.
+  read masterip
+  echo $masterip centos-master >> /etc/hosts
+fi
+
+echo Alles OK
+#for SERVICES in flanneld kube-proxy kubelet docker; do
+#    systemctl restart $SERVICES
+#    systemctl enable $SERVICES
+#    systemctl status $SERVICES
+#done
+
