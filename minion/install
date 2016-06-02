@@ -47,10 +47,10 @@ yum -y install --enablerepo=virt7-docker-common-release kubernetes flannel
 /usr/bin/cp -f /git/kubernetes-centos/minion/manual-install /root/manual-install
 
 
-for SERVICES in flanneld kube-proxy kubelet docker; do
-    systemctl restart $SERVICES
-    systemctl enable $SERVICES
-    systemctl status $SERVICES 
-done
+#for SERVICES in flanneld kube-proxy kubelet docker; do
+#    systemctl restart $SERVICES
+#    systemctl enable $SERVICES
+#    systemctl status $SERVICES 
+#done
 
 
