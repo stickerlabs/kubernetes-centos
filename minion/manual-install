@@ -7,9 +7,9 @@ if [ 'cat /etc/hosts|grep centos-master|cut -d " " -f 2' != "centos-master" ]; t
 fi
 
 echo Alles OK
-#for SERVICES in flanneld kube-proxy kubelet docker; do
-#    systemctl restart $SERVICES
-#    systemctl enable $SERVICES
-#    systemctl status $SERVICES
-#done
+for SERVICES in flanneld kube-proxy kubelet docker; do
+    systemctl restart $SERVICES
+    systemctl enable $SERVICES
+    systemctl status $SERVICES
+done
 
