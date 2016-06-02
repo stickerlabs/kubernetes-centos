@@ -6,9 +6,7 @@ echo $(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)  centos-m
 echo "PS1='[\u@\h ] MASTER \$ '" >> /root/.bashrc
 echo "PS1='[\u@\h ] MASTER \$ '" >> /home/centos/.bashrc
 
-
-# hostfile must contain IP adress of master-centos & minion-centos
-
+# get the latest updates
 yum -y update
 
 systemctl stop firewalld
@@ -20,7 +18,7 @@ systemctl start ntpd
 systemctl enable ntpd
 
 # Install some tools
-yum -y install git net-tools telnet vim mlocate
+yum -y install git wget net-tools telnet vim mlocate
 updatedb
 
 #get the git files
@@ -48,6 +46,7 @@ cp -f /etc/kubernetes/apiserver /etc/kubernetes/apiserver.orginal
 /usr/bin/cp -f /git/kubernetes-centos/master/conf/flanneld /etc/sysconfig/flanneld
 /usr/bin/cp -f /git/kubernetes-centos/master/conf/apiserver /etc/kubernetes/apiserver
 /usr/bin/cp -f /git/kubernetes-centos/master/conf/config /etc/kubernetes/config
+/usr/bin/cp -rf /git/kubernetes-centos/master/pods /root/
 
 for SERVICES in etcd kube-apiserver kube-controller-manager kube-scheduler; do
     systemctl restart $SERVICES
